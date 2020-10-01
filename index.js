@@ -1,20 +1,42 @@
+// TODO require express bodyparser and request
 const express = require("express");
 const bodyParser = require("body-parser");
-const request =require("request");
+const request = require("request");
 
 const app = express();
 
-app.use(bodyParser.urlencoded({extended:true}));
+// use bodyParser for getting response from the local server
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", function(req,res){
-    res.sendFile(__dirname + "/index.html");
+//get request for the web page
+app.get("/", function (req, res) {
+  res.sendFile(__dirname + "/index.html");
 });
 
-app.post("/",function(req,res){
-    console.log(req.body.crypto);
-    res.send("<h1 >good job keep it up</h1>");
+app.post("/", function (req, res) {
+  var crypto = req.body.crypto;
+  var fiat = req.body.fiat;
+  
+  const options = {
+    url:'https://apiv2.bitcoinaverage.com/indices/global/ticker/all?crypto='+crypto+'&fiat='+fiat,
+
+    headers: {
+      "x-ba-key": "ODkxZDA5MmIwOGQ1NGM5YmEwYzQ2MzhmZDk4NmM3NzY",
+    },
+  };
+
+  request(options, function (error, response, body) {
+    var data = JSON.parse(body); // here we convert the JSON object in the javascript object
+    var input = Object.keys(data)[0];
+    console.log(body[0].ask);
+    console.log("--------------------");
+    res.send(data);
+  });
 });
 
-app.listen("3000", function(){
-    console.log("server is running on 3000 port");
+
+
+app.listen(4000, function () {
+  console.log("server is running on 4000 port");
 });
+

@@ -14,14 +14,16 @@
 <body>
     <form action="/" method="post">
         <select name="crypto">
+            <option value="BTC">Bitcoins</option>
+            <option value="ETH">Etherioums</option>
+            <option value="LTC">Litecoin</option>
+        </select>
+
+        <select name="fiat">
             <option value="USD">US Doller</option>
             <option value="GBP">GB Pounds</option>
             <option value="EUR">Euros</option>
         </select>
-
-        <option value=""></option>
-        <option value=""></option>
-        <option value=""></option>
 
         <input type="submit" value="check it" class="btn btn-outline-warning" />
     </form>
