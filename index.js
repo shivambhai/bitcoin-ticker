@@ -27,10 +27,65 @@ app.post("/", function (req, res) {
 
   request(options, function (error, response, body) {
     var data = JSON.parse(body); // here we convert the JSON object in the javascript object
-    var input = Object.keys(data)[0];
-    console.log(body[0].ask);
-    console.log("--------------------");
-    res.send(data);
+    var input;
+    if(crypto == "BTC"){
+
+       switch (fiat) {
+        case "USD":
+           input = data.BTCUSD;
+          break;
+        case "GBP":
+           input = data.BTCGBP;
+           break;
+        case "EUR":
+           input = data.BTCEUR;
+           break;
+       }
+    }else 
+
+    if (crypto == "ETH") {
+      switch (fiat) {
+        case "USD":
+           input = data.ETHUSD;
+           break;
+        
+        case "GBP":
+           input = data.ETHGBP;
+           break;
+  
+        case "EUR":
+           input = data.ETHEUR;
+           break;
+       }
+      
+    }else
+
+    if (crypto == "LTC") {
+
+     switch (fiat) {
+       case "USD":
+          input = data.LTCUSD;
+          break;
+       
+       case "GBP":
+          input = data.LTCGBP;
+          break;
+ 
+       case "EUR":
+          input = data.LTCEUR;
+          break;
+      }
+
+    }
+
+    var price = input.last;
+    res.write(" "+price);
+    res.write(" "+ data);
+    res.send();
+    console.log(input.last);
+    console.log("------------");
+   
+    
   });
 });
 
