@@ -16,74 +16,96 @@ app.get("/", function (req, res) {
 app.post("/", function (req, res) {
   var crypto = req.body.crypto;
   var fiat = req.body.fiat;
-  
+  var amount = req.body.amount;
+  method='GET';
   const options = {
-    url:'https://apiv2.bitcoinaverage.com/indices/global/ticker/all?crypto='+crypto+'&fiat='+fiat,
+      // url for getting the full data of crypto currriencies 
+      // url:'https://apiv2.bitcoinaverage.com/indices/global/ticker/all?crypto='+crypto+'&fiat='+fiat,
 
+      // url for exchanging the value of cryto curriecies into fiat curriencies
+    url:"https://apiv2.bitcoinaverage.com/convert/global",
+    qs:{
+      from:crypto,
+      to:fiat,
+      amount:amount,
+    },
     headers: {
       "x-ba-key": "ODkxZDA5MmIwOGQ1NGM5YmEwYzQ2MzhmZDk4NmM3NzY",
     },
   };
 
   request(options, function (error, response, body) {
-    var data = JSON.parse(body); // here we convert the JSON object in the javascript object
-    var input;
-    if(crypto == "BTC"){
+     // here we convert the JSON object in the javascript object
+    // var data = JSON.parse(body);
+    // var input;
+    // if(crypto == "BTC"){
 
-       switch (fiat) {
-        case "USD":
-           input = data.BTCUSD;
-          break;
-        case "GBP":
-           input = data.BTCGBP;
-           break;
-        case "EUR":
-           input = data.BTCEUR;
-           break;
-       }
-    }else 
+    //    switch (fiat) {
+    //     case "USD":
+    //        input = data.BTCUSD;
+    //       break;
+    //     case "GBP":
+    //        input = data.BTCGBP;
+    //        break;
+    //     case "EUR":
+    //        input = data.BTCEUR;
+    //        break;
+    //    }
+    // }else 
 
-    if (crypto == "ETH") {
-      switch (fiat) {
-        case "USD":
-           input = data.ETHUSD;
-           break;
+    // if (crypto == "ETH") {
+    //   switch (fiat) {
+    //     case "USD":
+    //        input = data.ETHUSD;
+    //        break;
         
-        case "GBP":
-           input = data.ETHGBP;
-           break;
+    //     case "GBP":
+    //        input = data.ETHGBP;
+    //        break;
   
-        case "EUR":
-           input = data.ETHEUR;
-           break;
-       }
+    //     case "EUR":
+    //        input = data.ETHEUR;
+    //        break;
+    //    }
       
-    }else
+    // }else
 
-    if (crypto == "LTC") {
+    // if (crypto == "LTC") {
 
-     switch (fiat) {
-       case "USD":
-          input = data.LTCUSD;
-          break;
+    //  switch (fiat) {
+    //    case "USD":
+    //       input = data.LTCUSD;
+    //       break;
        
-       case "GBP":
-          input = data.LTCGBP;
-          break;
+    //    case "GBP":
+    //       input = data.LTCGBP;
+    //       break;
  
-       case "EUR":
-          input = data.LTCEUR;
-          break;
-      }
+    //    case "EUR":
+    //       input = data.LTCEUR;
+    //       break;
+    //   }
 
-    }
+    // }
 
-    var price = input.last;
-    res.write(" "+price);
-    res.write(" "+ data);
+
+    // displaying the recieved full data of first project 
+    // var price = input.last;
+    // var current_date = input.display_timestamp;
+    // res.write("<p> the current date is "+ current_date+ " </p>");
+    // res.write(" <P> the current price of "+crypto + " is "+ input.last + " "+ fiat +" </p>");
+    // res.send();
+    // console.log("------------");
+
+
+    // here is second project : showing the crypto curriecies in the fiat curriencies
+    var data = JSON.parse(body);
+    console.log(data);
+    var price = data.price;
+    var time=data.time;
+    res.write("<h1>the value of "+ amount + " "+ crypto + " in "+ fiat + " is " +price +" "+ fiat+"</h1>");
+    res.write("<p> and time when the conversion is happen is at"+ time+"</p>");
     res.send();
-    console.log(input.last);
-    console.log("------------");
    
     
   });
